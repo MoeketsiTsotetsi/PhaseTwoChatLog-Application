@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+        crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <a class="navbar-brand " href="#">Motor Sport Chat World</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link " href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Chat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Gallery</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About us</a>
+            </li>
+            
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+
+    <center>
+        <img src="./images/bracecar.png" class="logo"alt="car">
+    </center> 
+
+    
+      
+      <!-- jumbotron -->
+      <div class="container bg-secondary">
+          <h6 class="text-center">Chat Log</h6>
+        <textarea name="txtChatlog" id="txtChatlog" cols="2" rows="10" class="form-control"
+        placeholder="log"></textarea>
+        <br/>
+        <textarea name="txtMessage" id="txtMessage" cols="10" rows="2" class="form-control"
+        placeholder="Enter Message"></textarea>
+
+        <br/>
+        <textarea name="txtUsername" id="txtUsername" cols="2" rows="1" class="form-control"
+        placeholder="Enter Username"></textarea>
+
+        <br/>
+        <input type="submit" value="Send" id="send" class="btn btn-success btn-lg">
+    
+<br/>
+<br/>
+
+      </div>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+          var socket = io();
+          socket.on('chat', addChat);
+          $(() => {
+            $('#send').click(() => {
+                var chatMessage = {
+                    username: $('#txtUsername').val(),
+                    message: $('#txtMessage').val(),
+                    
+                };
+                postChat(chatMessage);
+            })
+        })
+        function postChat(chat) {
+            $.post('http://localhost:3000/chats', chat)
+            
+        }
+        function getChats() {
+            $.get('/chats', (chats) => {
+                chats.forEach(addChat);
+            })
+        }
+        function addChat(chatObj) {
+            $('#txtChatlog').append(chatObj.username +" :"+ chatObj.message  + "\n");
+        }
+      </script> 
+</body>
+</html>
